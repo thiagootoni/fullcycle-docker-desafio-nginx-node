@@ -1,4 +1,4 @@
 # Dependency directories
 Node/node_modules/
 
-Mysql/
+Mysql/shared_volume

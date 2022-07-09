@@ -3,7 +3,8 @@ version: '3'
 services:
 
   nginx:
-    image: thiagootoni/fc-nginx:desafio2
+    build:
+      context: Nginx
     container_name: nginx
     networks: 
       - node-network
@@ -13,12 +14,14 @@ services:
        - db
 
   app:
-    image: thiagootoni/fc-node:desafio2
+    build:
+      context: Node
     container_name: app
     networks: 
       - node-network
     volumes: 
       - ./Node:/usr/src/app
+      - /usr/src/app/node_modules
     tty: true
     expose:
       - "3000"
@@ -26,15 +29,15 @@ services:
        - db
 
   db:
-    image: mysql:5.7
-    command: --innodb-use-native-aio=0
+    build:
+      context: Mysql
     container_name: db
     restart: always
     tty: true
     expose:
       - "3606"
     volumes: 
-      - ./Mysql:/var/lib/mysql
+      - ./Mysql/shared_volume:/var/lib/mysql
     environment: 
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
